@@ -1,0 +1,5 @@
+{
+	"jenkins_servers": "http://master.jenkins.com:8080/",
+	"jenkins_user": "jenkins",
+	"jenkins_password": "jenkins"
+}

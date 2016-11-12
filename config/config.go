@@ -8,9 +8,10 @@ import (
 )
 
 type Config struct {
-	JenkinsServer   string `json:"jenkins_server,omitempty"`
-	JenkinsUser     string `json:"jenkins_user,omitempty"`
-	JenkinsPassword string `json:"jenkins_password,omitempty"`
+	JenkinsServer       string `json:"jenkins_server,omitempty"`
+	JenkinsUser         string `json:"jenkins_user,omitempty"`
+	JenkinsPassword     string `json:"jenkins_password,omitempty"`
+	JenkinsCredentialId string `json:"jenkins_credential,omitempty"`
 }
 
 func Read(path string) (*Config, error) {

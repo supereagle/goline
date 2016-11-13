@@ -117,7 +117,8 @@ func parseBody(req *http.Request) (*api.Pipeline, error) {
 		return nil, err
 	}
 
-	switch pipeline.ProjectType {
+	projectType := pipeline.ProjectType
+	switch projectType {
 	case api.SHELL, api.BATCH:
 		project := api.ScriptProject{}
 		err = json.UnmarshalJsonStr2Obj(projectStr, &project)
@@ -132,8 +133,15 @@ func parseBody(req *http.Request) (*api.Pipeline, error) {
 			return nil, err
 		}
 		pipeline.Project = project
+	case api.GRADLE:
+		project := api.GradleProject{}
+		err = json.UnmarshalJsonStr2Obj(projectStr, &project)
+		if err != nil {
+			return nil, err
+		}
+		pipeline.Project = project
 	default:
-		return nil, fmt.Errorf("The project type %s is not supported", pipeline.ProjectType)
+		return nil, fmt.Errorf("The project type %s is not supported", projectType)
 	}
 
 	return pipeline, nil

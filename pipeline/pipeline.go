@@ -178,6 +178,12 @@ func ValidatePipeline(pipeline *api.Pipeline) bool {
 			log.Errorln("The maven root pom is not specified")
 			return false
 		}
+	case api.GRADLE:
+		_, ok := pipeline.Project.(api.GradleProject)
+		if !ok {
+			log.Errorf("Project config is not compatiable with project type %s", projectType)
+			return false
+		}
 	default:
 		log.Errorf("The project type %s is not supported", pipeline.ProjectType)
 		return false

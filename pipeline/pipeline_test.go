@@ -40,6 +40,43 @@ func TestValidatePipeline(t *testing.T) {
 			},
 			result: true,
 		},
+		PipelineValidator{
+			pipeline: &api.Pipeline{
+				Name: "validate-period-trigger",
+				Jdk:  "jdk1.8",
+				Repo: &api.Repo{
+					RepoPath: "git@test.com:test/test.git",
+					Branch:   "master",
+				},
+				PeriodTrigger: &api.PeriodTrigger{
+					Skipped:  false,
+					Strategy: "H/30 * * * *",
+				},
+				ProjectType: "maven",
+				Project: api.MavenProject{
+					RootPom: "pom.xml",
+				},
+			},
+			result: true,
+		},
+		PipelineValidator{
+			pipeline: &api.Pipeline{
+				Name: "validate-period-trigger2",
+				Jdk:  "jdk1.8",
+				Repo: &api.Repo{
+					RepoPath: "git@test.com:test/test.git",
+					Branch:   "master",
+				},
+				PeriodTrigger: &api.PeriodTrigger{
+					Skipped: false,
+				},
+				ProjectType: "maven",
+				Project: api.MavenProject{
+					RootPom: "pom.xml",
+				},
+			},
+			result: false,
+		},
 	}
 
 	for _, pv := range pvs {

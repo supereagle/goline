@@ -25,6 +25,15 @@ func generatePipelineJobConfig(pipeline *api.Pipeline, credentialId string) (job
 	jobTmpl = strings.NewReplacer("${pipeline.perform.phases}", convertStagesToString(pipeline.Stages),
 		"${project.branch}", pipeline.Repo.Branch).Replace(jobTmpl)
 
+	// Generate the period trigger
+	if pipeline.PeriodTrigger != nil && !pipeline.PeriodTrigger.Skipped {
+		periodTriggerTmpl := strings.Replace(PIPELINE_TRIGGERS_TEMPLATE, "${period.trigger.strategy}",
+			pipeline.PeriodTrigger.Strategy, 1)
+		jobTmpl = strings.Replace(jobTmpl, "${pipeline.triggers}", periodTriggerTmpl, 1)
+	} else {
+		jobTmpl = strings.Replace(jobTmpl, "${pipeline.triggers}", "<triggers/>", 1)
+	}
+
 	jobCfg = jobTmpl
 	return
 }
@@ -141,6 +150,14 @@ func ValidatePipeline(pipeline *api.Pipeline) bool {
 	if _, ok := api.JDK_PATH[pipeline.Jdk]; !ok {
 		log.Errorf("The jdk version %s is not supported", pipeline.Jdk)
 		return false
+	}
+
+	// Check the period trigger
+	if pipeline.PeriodTrigger != nil && !pipeline.PeriodTrigger.Skipped {
+		// TODO (robin) Check strategy to follow the syntax of cron
+		if strings.TrimSpace(pipeline.PeriodTrigger.Strategy) == "" {
+			return false
+		}
 	}
 
 	// Check the repo

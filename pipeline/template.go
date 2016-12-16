@@ -38,6 +38,9 @@ const (
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      ${pipeline.triggers}
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.9">
     <script>${pipeline.script}</script>
@@ -45,6 +48,12 @@ const (
   </definition>
   <triggers/>
 </flow-definition>`
+
+	PIPELINE_TRIGGERS_TEMPLATE = `<triggers>
+        <hudson.triggers.TimerTrigger>
+          <spec>${period.trigger.strategy}</spec>
+        </hudson.triggers.TimerTrigger>
+      </triggers>`
 
 	PIPELINE_SCRIPT_TEMPLATE = `
 performPhases = "${performPhases}"

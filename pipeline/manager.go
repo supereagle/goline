@@ -58,14 +58,8 @@ func (mgr *Manager) Create(pl *api.Pipeline) error {
 // Update Updates the pipeline according to the pipeline config
 func (mgr *Manager) Update(pl *api.Pipeline) error {
 	// Check the existence of the pipeline job
-	job, err := mgr.Jenkins.GetJob(pl.Name)
+	job, err := mgr.getJob(pl.Name)
 	if err != nil {
-		if strings.Contains(err.Error(), string(http.StatusNotFound)) {
-			err = fmt.Errorf("The pipeline %s does not exist", pl.Name)
-			log.Errorln(err.Error())
-			return err
-		}
-		err = fmt.Errorf("Fail to get the pipeline %s as %s", pl.Name, err.Error())
 		log.Errorln(err.Error())
 		return err
 	}
@@ -90,14 +84,8 @@ func (mgr *Manager) Update(pl *api.Pipeline) error {
 // Delete Deletes the pipeline according to the pipeline name
 func (mgr *Manager) Delete(plName string) error {
 	// Check the existence of the pipeline job
-	job, err := mgr.Jenkins.GetJob(plName)
+	job, err := mgr.getJob(plName)
 	if err != nil {
-		if strings.Contains(err.Error(), string(http.StatusNotFound)) {
-			err = fmt.Errorf("The pipeline %s does not exist", plName)
-			log.Errorln(err.Error())
-			return err
-		}
-		err = fmt.Errorf("Fail to get the pipeline %s as %s", plName, err.Error())
 		log.Errorln(err.Error())
 		return err
 	}
@@ -109,4 +97,42 @@ func (mgr *Manager) Delete(plName string) error {
 		return err
 	}
 	return nil
+}
+
+// Perform Performs the pipeline with the perform parameters
+func (mgr *Manager) Perform(plName string, pParams *api.PerformParams) error {
+	// Check the existence of the pipeline job
+	job, err := mgr.getJob(plName)
+	if err != nil {
+		log.Errorln(err.Error())
+		return err
+	}
+
+	params := make(map[string]string)
+	params["branch"] = pParams.Branch
+	params["performPhases"] = pParams.PerformPhases
+
+	// Invoke the pipeline job with params
+	//_, err = job.Invoke(nil, false, params, "", "")
+	_, err = job.InvokeSimple(params)
+	if err != nil {
+		log.Errorln(err.Error())
+		return err
+	}
+	return nil
+}
+
+//getJob Gets the specified pipeline job, return error if not exists
+func (mgr *Manager) getJob(plName string) (*gojenkins.Job, error) {
+	job, err := mgr.Jenkins.GetJob(plName)
+	if err != nil {
+		if strings.Contains(err.Error(), string(http.StatusNotFound)) {
+			err = fmt.Errorf("The pipeline %s does not exist", plName)
+			return nil, err
+		}
+		err = fmt.Errorf("Fail to get the pipeline %s as %s", plName, err.Error())
+		return nil, err
+	}
+
+	return job, nil
 }

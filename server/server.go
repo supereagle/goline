@@ -37,6 +37,7 @@ func (server *Server) registerRoutes() {
 	router.Path("/pipelines").Methods("POST").HandlerFunc(server.createPipeline)
 	router.Path("/pipelines/{pipelinename}").Methods("PUT").HandlerFunc(server.updatePipeline)
 	router.Path("/pipelines/{pipelinename}").Methods("DELETE").HandlerFunc(server.deletePipeline)
+	router.Path("/pipelines/performance/{pipelinename}").Methods("PUT").HandlerFunc(server.performPipeline)
 }
 
 func (server *Server) createPipeline(resp http.ResponseWriter, req *http.Request) {
@@ -91,6 +92,29 @@ func (server *Server) deletePipeline(resp http.ResponseWriter, req *http.Request
 	err := server.pm.Delete(plName)
 	if err != nil {
 		err = fmt.Errorf("Fail to delete the pipeline %s as %s", plName, err.Error())
+		log.Errorln(err.Error())
+		httputil.WriteResponse(resp, http.StatusInternalServerError, nil, err)
+		return
+	}
+
+	httputil.WriteResponse(resp, http.StatusOK, nil, nil)
+}
+
+func (server *Server) performPipeline(resp http.ResponseWriter, req *http.Request) {
+	plName := mux.Vars(req)["pipelinename"]
+	params := &api.PerformParams{}
+	err := json.Unmarshal2JsonObj(req.Body, params)
+	if err != nil {
+		err = fmt.Errorf("Bad request. Can't parse the request body to a json object as %s", err.Error())
+		log.Errorln(err.Error())
+		httputil.WriteResponse(resp, http.StatusInternalServerError, nil, err)
+		return
+	}
+	log.Infof("Perform Pipeline %s with params %v", plName, params)
+
+	err = server.pm.Perform(plName, params)
+	if err != nil {
+		err = fmt.Errorf("Fail to perform the pipeline %s as %s", plName, err.Error())
 		log.Errorln(err.Error())
 		httputil.WriteResponse(resp, http.StatusInternalServerError, nil, err)
 		return

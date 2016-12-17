@@ -83,3 +83,8 @@ type GradleProject struct {
 type GradleUnitTest struct {
 	TestReportPath string `json:"test_report_path,omitempty"`
 }
+
+type PerformParams struct {
+	Branch        string `json:"branch,omitempty"`
+	PerformPhases string `json:"perform_phases,omitempty"`
+}

@@ -101,6 +101,7 @@ func (server *Server) deletePipeline(resp http.ResponseWriter, req *http.Request
 }
 
 func (server *Server) performPipeline(resp http.ResponseWriter, req *http.Request) {
+	defer req.Body.Close()
 	plName := mux.Vars(req)["pipelinename"]
 	params := &api.PerformParams{}
 	err := json.Unmarshal2JsonObj(req.Body, params)
@@ -129,6 +130,7 @@ func (server *Server) Start() error {
 }
 
 func parseBody(req *http.Request) (*api.Pipeline, error) {
+	defer req.Body.Close()
 	pipeline := &api.Pipeline{}
 	err := json.Unmarshal2JsonObj(req.Body, pipeline)
 	if err != nil {

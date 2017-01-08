@@ -33,7 +33,7 @@ const (
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>performPhases</name>
-          <description>The phase to be performed.</description>
+          <description>The phases to be performed.</description>
           <defaultValue>${pipeline.perform.phases}</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>

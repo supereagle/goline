@@ -4,6 +4,7 @@
   - [Create](#create-pipeline)
   - [Update](#update-pipeline)
   - [Delete](#delete-pipeline)
+  - [Perform](#perform-pipeline)
 
 ## Pipelines
 
@@ -206,6 +207,7 @@ Content-Type: application/json
 }
 ```
 
+### Update Pipeline
 
 #### PUT /pipelines/`:pipelinename`
 
@@ -283,6 +285,38 @@ The DELETE route for the pipelines deletes the Jenkins pipeline specified in the
 
 ```json
 DELETE http://localhost:8080/pipelines/maven-pipeline  HTTP/1.1
+```
+
+#### Example Response
+
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "code": 200,
+  "status": "OK"
+}
+```
+
+### Perform Pipeline
+
+#### PUT /pipelines/performance/`:pipelinename`
+
+#### Description
+
+The PUT route for the pipelines porforms the Jenkins pipeline specified in the REST path with the parameters from the request body.
+Two parameters can be specified: `branch` is the srouce code branch, `perform_phases` is the string of performed phases separated with commas. If some or all of these parameters are not specified in the request body, the default values will be used.
+
+#### Example Request
+
+```json
+PUT http://localhost:8080/pipelines/performance/maven-pipeline  HTTP/1.1
+
+{
+	"branch": "master",
+	"perform_phases": "compile,build"
+}
 ```
 
 #### Example Response

@@ -1,8 +1,11 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"strings"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
@@ -10,8 +13,10 @@ import (
 	"github.com/supereagle/jenkins-pipeline/config"
 	"github.com/supereagle/jenkins-pipeline/pipeline"
 	httputil "github.com/supereagle/jenkins-pipeline/utils/http"
-	"github.com/supereagle/jenkins-pipeline/utils/json"
+	jsonutil "github.com/supereagle/jenkins-pipeline/utils/json"
 )
+
+const DefaultSwaggerPath = "./swagger.json"
 
 type Server struct {
 	router *mux.Router
@@ -28,7 +33,13 @@ func NewServer(cfg *config.Config) (server *Server, err error) {
 		router: mux.NewRouter(),
 		pm:     pm,
 	}
+
+	// register the pipeline handlers
 	server.registerRoutes()
+
+	// register the swagger handler
+	server.registerSwaggerHandler()
+
 	return
 }
 
@@ -104,7 +115,7 @@ func (server *Server) performPipeline(resp http.ResponseWriter, req *http.Reques
 	defer req.Body.Close()
 	plName := mux.Vars(req)["pipelinename"]
 	params := &api.PerformParams{}
-	err := json.Unmarshal2JsonObj(req.Body, params)
+	err := jsonutil.Unmarshal2JsonObj(req.Body, params)
 	if err != nil {
 		err = fmt.Errorf("Bad request. Can't parse the request body to a json object as %s", err.Error())
 		log.Errorln(err.Error())
@@ -129,16 +140,48 @@ func (server *Server) Start() error {
 	return http.ListenAndServe(":8080", server.router)
 }
 
+func (server *Server) registerSwaggerHandler() {
+	server.router.HandleFunc("/swagger.json", func(resp http.ResponseWriter, req *http.Request) {
+		path := strings.TrimSpace(req.URL.Query().Get("path"))
+		if len(path) == 0 {
+			path = DefaultSwaggerPath
+		}
+
+		// Read and response the swagger.json
+		resp.Header().Set("Content-Type", "application/json")
+
+		// The query parameter path must end with swagger.json
+		if !strings.HasSuffix(path, "swagger.json") {
+			result, _ := json.Marshal(&map[string]string{"error": fmt.Sprintf("Path %s must end with swagger.json.", path)})
+			resp.WriteHeader(400)
+			resp.Write(result)
+			return
+		}
+
+		result, err := ioutil.ReadFile(path)
+		if err != nil {
+			result, _ := json.Marshal(&map[string]string{"error": fmt.Sprintf("Fail to read file %s as %s", path, err.Error())})
+
+			resp.WriteHeader(500)
+			resp.Write(result)
+			return
+		}
+
+		resp.WriteHeader(200)
+		resp.Write(result)
+	})
+}
+
 func parseBody(req *http.Request) (*api.Pipeline, error) {
 	defer req.Body.Close()
 	pipeline := &api.Pipeline{}
-	err := json.Unmarshal2JsonObj(req.Body, pipeline)
+	err := jsonutil.Unmarshal2JsonObj(req.Body, pipeline)
 	if err != nil {
 		err = fmt.Errorf("Bad request. Can't parse the request body to a json object as %s", err.Error())
 		return nil, err
 	}
 
-	projectStr, err := json.Marshal2JsonStr(pipeline.Project)
+	projectStr, err := jsonutil.Marshal2JsonStr(pipeline.Project)
 	if err != nil {
 		return nil, err
 	}
@@ -147,21 +190,21 @@ func parseBody(req *http.Request) (*api.Pipeline, error) {
 	switch projectType {
 	case api.SHELL, api.BATCH:
 		project := api.ScriptProject{}
-		err = json.UnmarshalJsonStr2Obj(projectStr, &project)
+		err = jsonutil.UnmarshalJsonStr2Obj(projectStr, &project)
 		if err != nil {
 			return nil, err
 		}
 		pipeline.Project = project
 	case api.MAVEN:
 		project := api.MavenProject{}
-		err = json.UnmarshalJsonStr2Obj(projectStr, &project)
+		err = jsonutil.UnmarshalJsonStr2Obj(projectStr, &project)
 		if err != nil {
 			return nil, err
 		}
 		pipeline.Project = project
 	case api.GRADLE:
 		project := api.GradleProject{}
-		err = json.UnmarshalJsonStr2Obj(projectStr, &project)
+		err = jsonutil.UnmarshalJsonStr2Obj(projectStr, &project)
 		if err != nil {
 			return nil, err
 		}

@@ -1,0 +1,283 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/pipelines": {
+      "post": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Creates a pipeline.",
+        "operationId": "createPipeline",
+        "parameters": [
+          {
+            "x-go-name": "Pipeline",
+            "description": "The config of the pipeline",
+            "name": "pipeline",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pipeline"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/responses/pipelineResponse"
+          },
+          "default": {
+            "$ref": "#/responses/genericErrorResponse"
+          }
+        }
+      }
+    },
+    "/pipelines/performance/{pipelinename}": {
+      "put": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Performs a pipeline.",
+        "operationId": "performPipeline",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "Name",
+            "description": "The name of the pipeline",
+            "name": "name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "x-go-name": "PerformParams",
+            "description": "The perform parameters of the pipeline",
+            "name": "performParams",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PerformParams"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/noObjectResponse"
+          },
+          "default": {
+            "$ref": "#/responses/genericErrorResponse"
+          }
+        }
+      }
+    },
+    "/pipelines/{pipelinename}": {
+      "put": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Updates the configure for a pipeline.",
+        "operationId": "updatePipeline",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "Name",
+            "description": "The name of the pipeline",
+            "name": "name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/pipelineResponse"
+          },
+          "default": {
+            "$ref": "#/responses/genericErrorResponse"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Deletes a pipeline.",
+        "operationId": "deletePipeline",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "Name",
+            "description": "The name of the pipeline",
+            "name": "name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/noObjectResponse"
+          },
+          "default": {
+            "$ref": "#/responses/genericErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PerformParams": {
+      "type": "object",
+      "properties": {
+        "branch": {
+          "type": "string",
+          "x-go-name": "Branch"
+        },
+        "perform_phases": {
+          "type": "string",
+          "x-go-name": "PerformPhases"
+        }
+      },
+      "x-go-package": "github.com/supereagle/jenkins-pipeline/api"
+    },
+    "PeriodTrigger": {
+      "type": "object",
+      "properties": {
+        "skipped": {
+          "type": "boolean",
+          "x-go-name": "Skipped"
+        },
+        "strategy": {
+          "type": "string",
+          "x-go-name": "Strategy"
+        }
+      },
+      "x-go-package": "github.com/supereagle/jenkins-pipeline/api"
+    },
+    "Pipeline": {
+      "type": "object",
+      "properties": {
+        "jdk": {
+          "type": "string",
+          "x-go-name": "Jdk"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "node_label": {
+          "type": "string",
+          "x-go-name": "NodeLabel"
+        },
+        "period_trigger": {
+          "x-go-name": "PeriodTrigger",
+          "$ref": "#/definitions/PeriodTrigger"
+        },
+        "project": {
+          "type": "object",
+          "x-go-name": "Project"
+        },
+        "repo": {
+          "x-go-name": "Repo",
+          "$ref": "#/definitions/Repo"
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Stage"
+          },
+          "x-go-name": "Stages"
+        },
+        "type": {
+          "x-go-name": "ProjectType",
+          "$ref": "#/definitions/ProjectType"
+        }
+      },
+      "x-go-package": "github.com/supereagle/jenkins-pipeline/api"
+    },
+    "ProjectType": {
+      "type": "string",
+      "x-go-package": "github.com/supereagle/jenkins-pipeline/api"
+    },
+    "Repo": {
+      "type": "object",
+      "properties": {
+        "branch": {
+          "type": "string",
+          "x-go-name": "Branch"
+        },
+        "repo_path": {
+          "type": "string",
+          "x-go-name": "RepoPath"
+        }
+      },
+      "x-go-package": "github.com/supereagle/jenkins-pipeline/api"
+    },
+    "Stage": {
+      "type": "string",
+      "x-go-package": "github.com/supereagle/jenkins-pipeline/api"
+    }
+  },
+  "responses": {
+    "genericErrorResponse": {
+      "description": "A GenericErrorResponse is the default error message that is generated.\nFor certain status codes there are more appropriate error structures.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "x-go-name": "Code"
+          },
+          "error": {
+            "type": "string",
+            "x-go-name": "ErrorMsg"
+          },
+          "status": {
+            "type": "string",
+            "x-go-name": "Status"
+          }
+        }
+      }
+    },
+    "noObjectResponse": {
+      "description": "A NoObjectResponse response model\n\nThis is used for returning a response without json object as body",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "x-go-name": "Code"
+          },
+          "status": {
+            "type": "string",
+            "x-go-name": "Status"
+          }
+        }
+      }
+    },
+    "pipelineResponse": {
+      "description": "A PipelineResponse response model\n\nThis is used for returning a response with a single pipeline as body",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "x-go-name": "Code"
+          },
+          "json_object": {
+            "type": "object",
+            "properties": {
+              "pipeline": {
+                "x-go-name": "Pipeline",
+                "$ref": "#/definitions/Pipeline"
+              }
+            },
+            "x-go-name": "JsonObject"
+          },
+          "status": {
+            "type": "string",
+            "x-go-name": "Status"
+          }
+        }
+      }
+    }
+  }
+}

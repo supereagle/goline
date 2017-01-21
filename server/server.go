@@ -51,6 +51,13 @@ func (server *Server) registerRoutes() {
 	router.Path("/pipelines/performance/{pipelinename}").Methods("PUT").HandlerFunc(server.performPipeline)
 }
 
+// createPipeline swagger:route POST /pipelines pipelines createPipeline
+//
+// Creates a pipeline.
+//
+// Responses:
+//    default: genericErrorResponse
+//        201: pipelineResponse
 func (server *Server) createPipeline(resp http.ResponseWriter, req *http.Request) {
 	pipeline, err := parseBody(req)
 	if err != nil {
@@ -72,6 +79,13 @@ func (server *Server) createPipeline(resp http.ResponseWriter, req *http.Request
 	httputil.WriteResponse(resp, http.StatusCreated, pipeline, nil)
 }
 
+// updatePipeline swagger:route PUT /pipelines/{pipelinename} pipelines updatePipeline
+//
+// Updates the configure for a pipeline.
+//
+// Responses:
+//    default: genericErrorResponse
+//        200: pipelineResponse
 func (server *Server) updatePipeline(resp http.ResponseWriter, req *http.Request) {
 	plName := mux.Vars(req)["pipelinename"]
 
@@ -96,6 +110,13 @@ func (server *Server) updatePipeline(resp http.ResponseWriter, req *http.Request
 	httputil.WriteResponse(resp, http.StatusOK, pipeline, nil)
 }
 
+// deletePipeline swagger:route DELETE /pipelines/{pipelinename} pipelines deletePipeline
+//
+// Deletes a pipeline.
+//
+// Responses:
+//    default: genericErrorResponse
+//        200: noObjectResponse
 func (server *Server) deletePipeline(resp http.ResponseWriter, req *http.Request) {
 	plName := mux.Vars(req)["pipelinename"]
 	log.Infof("Delete Pipeline %s", plName)
@@ -111,6 +132,13 @@ func (server *Server) deletePipeline(resp http.ResponseWriter, req *http.Request
 	httputil.WriteResponse(resp, http.StatusOK, nil, nil)
 }
 
+// performPipeline swagger:route PUT /pipelines/performance/{pipelinename} pipelines performPipeline
+//
+// Performs a pipeline.
+//
+// Responses:
+//    default: genericErrorResponse
+//        200: noObjectResponse
 func (server *Server) performPipeline(resp http.ResponseWriter, req *http.Request) {
 	defer req.Body.Close()
 	plName := mux.Vars(req)["pipelinename"]

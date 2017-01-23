@@ -5,8 +5,8 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
-	"github.com/supereagle/jenkins-pipeline/config"
-	"github.com/supereagle/jenkins-pipeline/server"
+	"github.com/supereagle/goline/config"
+	"github.com/supereagle/goline/server"
 )
 
 func main() {

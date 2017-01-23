@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/supereagle/jenkins-pipeline/utils/json"
+	"github.com/supereagle/goline/utils/json"
 )
 
 type ResponseEntity struct {

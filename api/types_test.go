@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/supereagle/jenkins-pipeline/api"
-	"github.com/supereagle/jenkins-pipeline/utils/json"
+	"github.com/supereagle/goline/api"
+	"github.com/supereagle/goline/utils/json"
 )
 
 func TestScriptProject(t *testing.T) {

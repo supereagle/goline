@@ -9,11 +9,11 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
-	"github.com/supereagle/jenkins-pipeline/api"
-	"github.com/supereagle/jenkins-pipeline/config"
-	"github.com/supereagle/jenkins-pipeline/pipeline"
-	httputil "github.com/supereagle/jenkins-pipeline/utils/http"
-	jsonutil "github.com/supereagle/jenkins-pipeline/utils/json"
+	"github.com/supereagle/goline/api"
+	"github.com/supereagle/goline/config"
+	"github.com/supereagle/goline/pipeline"
+	httputil "github.com/supereagle/goline/utils/http"
+	jsonutil "github.com/supereagle/goline/utils/json"
 )
 
 const DefaultSwaggerPath = "./swagger.json"

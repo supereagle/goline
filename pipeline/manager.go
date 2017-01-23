@@ -7,8 +7,8 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/bndr/gojenkins"
-	"github.com/supereagle/jenkins-pipeline/api"
-	"github.com/supereagle/jenkins-pipeline/config"
+	"github.com/supereagle/goline/api"
+	"github.com/supereagle/goline/config"
 )
 
 type Manager struct {

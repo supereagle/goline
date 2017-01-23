@@ -3,8 +3,8 @@ package pipeline_test
 import (
 	"testing"
 
-	"github.com/supereagle/jenkins-pipeline/api"
-	"github.com/supereagle/jenkins-pipeline/pipeline"
+	"github.com/supereagle/goline/api"
+	"github.com/supereagle/goline/pipeline"
 )
 
 func TestValidatePipeline(t *testing.T) {

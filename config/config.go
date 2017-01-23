@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/supereagle/jenkins-pipeline/utils/json"
+	"github.com/supereagle/goline/utils/json"
 )
 
 type Config struct {

@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/supereagle/jenkins-pipeline/api"
+	"github.com/supereagle/goline/api"
 )
 
 func generatePipelineJobConfig(pipeline *api.Pipeline, credentialId string) (jobCfg string, err error) {

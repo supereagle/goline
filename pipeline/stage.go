@@ -3,7 +3,7 @@ package pipeline
 import (
 	"strings"
 
-	"github.com/supereagle/jenkins-pipeline/api"
+	"github.com/supereagle/goline/api"
 )
 
 type StageGenerator interface {

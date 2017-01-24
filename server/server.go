@@ -177,6 +177,8 @@ func (server *Server) registerSwaggerHandler() {
 
 		// Read and response the swagger.json
 		resp.Header().Set("Content-Type", "application/json")
+		resp.Header().Set("Access-Control-Allow-Origin", "*")
+		resp.Header().Set("Access-Control-Allow-Methods", "GET")
 
 		// The query parameter path must end with swagger.json
 		if !strings.HasSuffix(path, "swagger.json") {

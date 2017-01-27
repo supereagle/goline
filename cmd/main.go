@@ -33,13 +33,8 @@ func main() {
 			return
 		}
 
-		// Create and start the server
-		server, err := server.NewServer(cfg)
-		if err != nil {
-			log.Errorln(err.Error())
-			return
-		}
-		err = server.Start()
+		// Run the server
+		err = server.Run(cfg)
 		if err != nil {
 			log.Errorln(err.Error())
 			return

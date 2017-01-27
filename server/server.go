@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
@@ -23,13 +24,13 @@ type Server struct {
 	pm     *pipeline.Manager
 }
 
-func NewServer(cfg *config.Config) (server *Server, err error) {
+func Run(cfg *config.Config) error {
 	pm, err := pipeline.NewPipelineManager(cfg)
 	if err != nil {
-		return nil, fmt.Errorf("Fail to create the server as %s", err.Error())
+		return fmt.Errorf("Fail to create the server as %s", err.Error())
 	}
 
-	server = &Server{
+	server := &Server{
 		router: mux.NewRouter(),
 		pm:     pm,
 	}
@@ -40,7 +41,8 @@ func NewServer(cfg *config.Config) (server *Server, err error) {
 	// register the swagger handler
 	server.registerSwaggerHandler()
 
-	return
+	log.Infoln("Start the server to listen on: %d", cfg.Port)
+	return http.ListenAndServe(":"+strconv.Itoa(cfg.Port), server.router)
 }
 
 func (server *Server) registerRoutes() {
@@ -161,11 +163,6 @@ func (server *Server) performPipeline(resp http.ResponseWriter, req *http.Reques
 	}
 
 	httputil.WriteResponse(resp, http.StatusOK, nil, nil)
-}
-
-func (server *Server) Start() error {
-	log.Infoln("Start the server!")
-	return http.ListenAndServe(":8080", server.router)
 }
 
 func (server *Server) registerSwaggerHandler() {

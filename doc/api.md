@@ -27,9 +27,11 @@ Supported project types:
 
 ##### Example Request
 
-```json
+```http
 POST http://localhost:8080/pipelines  HTTP/1.1
+```
 
+```json
 {
 	"name": "maven-pipeline",
 	"node_label": "maven-slave",
@@ -52,10 +54,12 @@ POST http://localhost:8080/pipelines  HTTP/1.1
 
 ##### Example Response
 
-```json
+```http
 HTTP/1.1 201 Created
 Content-Type: application/json
+```
 
+```json
 {
   "code": 201,
   "status": "Created",
@@ -88,9 +92,11 @@ Content-Type: application/json
 
 ##### Example Request
 
-```json
+```http
 POST http://localhost:8080/pipelines  HTTP/1.1
+```
 
+```json
 {
 	"name": "gradle-pipeline",
 	"node_label": "gradle-slave",
@@ -112,10 +118,12 @@ POST http://localhost:8080/pipelines  HTTP/1.1
 
 ##### Example Response
 
-```json
+```http
 HTTP/1.1 201 Created
 Content-Type: application/json
+```
 
+```json
 {
   "code": 201,
   "status": "Created",
@@ -148,9 +156,11 @@ Script Pipeline includes both Shell script on Linux and Batch script on Windows.
 
 ##### Example Request
 
-```json
+```http
 POST http://localhost:8080/pipelines  HTTP/1.1
+```
 
+```json
 {
 	"name": "shell-pipeline",
 	"node_label": "shell-slave",
@@ -178,10 +188,12 @@ POST http://localhost:8080/pipelines  HTTP/1.1
 
 ##### Example Response
 
-```json
+```http
 HTTP/1.1 201 Created
 Content-Type: application/json
+```
 
+```json
 {
 	"name": "shell-pipeline",
 	"node_label": "shell-slave",
@@ -224,9 +236,11 @@ The request body is the same as that of creating pipeline, except that the `name
 * Maven options: From `-Ptest` to `-Pstaging`
 * Stages: Skip unit test stage
 
-```json
+```http
 PUT http://localhost:8080/pipelines/maven-pipeline  HTTP/1.1
+```
 
+```json
 {
 	"node_label": "maven-slave",
 	"jdk": "jdk1.8",
@@ -245,10 +259,12 @@ PUT http://localhost:8080/pipelines/maven-pipeline  HTTP/1.1
 
 #### Example Response
 
-```json
+```http
 HTTP/1.1 200 OK
 Content-Type: application/json
+```
 
+```json
 {
   "code": 200,
   "status": "OK",
@@ -283,16 +299,18 @@ The DELETE route for the pipelines deletes the Jenkins pipeline specified in the
 
 #### Example Request
 
-```json
+```http
 DELETE http://localhost:8080/pipelines/maven-pipeline  HTTP/1.1
 ```
 
 #### Example Response
 
-```json
+```http
 HTTP/1.1 200 OK
 Content-Type: application/json
+```
 
+```json
 {
   "code": 200,
   "status": "OK"
@@ -310,9 +328,11 @@ Two parameters can be specified: `branch` is the srouce code branch, `perform_ph
 
 #### Example Request
 
-```json
+```http
 PUT http://localhost:8080/pipelines/performance/maven-pipeline  HTTP/1.1
+```
 
+```json
 {
 	"branch": "master",
 	"perform_phases": "compile,build"
@@ -321,10 +341,12 @@ PUT http://localhost:8080/pipelines/performance/maven-pipeline  HTTP/1.1
 
 #### Example Response
 
-```json
+```http
 HTTP/1.1 200 OK
 Content-Type: application/json
+```
 
+```json
 {
   "code": 200,
   "status": "OK"

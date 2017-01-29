@@ -101,6 +101,13 @@ func generatePipelineScriptTmpl(pipeline *api.Pipeline, credenitalId string) (pi
 		scriptTmpl = strings.Replace(scriptTmpl, "${pipeline.script.stage.build}", "// Skipped", 1)
 	}
 
+	// Add the archive workspace
+	if pipeline.ArchiveWorkspace {
+		scriptTmpl = strings.Replace(scriptTmpl, "${pipeline.script.archive.workspace}", ARCHIVE_WORKSPACE, 1)
+	} else {
+		scriptTmpl = strings.Replace(scriptTmpl, "${pipeline.script.archive.workspace}", "// Not need to archive workspace", 1)
+	}
+
 	pipelineScriptTmpl = scriptTmpl
 	return
 }

@@ -84,7 +84,7 @@ node("${pipeline.label.node}") {
 	}
 
     // Archive the workspace
-    archiveArtifacts artifacts: '**/*', excludes: '**/*.war, **/*.tar.gz, **/*.tgz, **/*.zip'
+	${pipeline.script.archive.workspace}
 }
 	`
 
@@ -175,4 +175,6 @@ def build() {
     sh '''${script.build.command}'''
 }
 	`
+
+	ARCHIVE_WORKSPACE = `archiveArtifacts artifacts: '**/*', excludes: '**/*.war, **/*.tar.gz, **/*.tgz, **/*.zip'`
 )

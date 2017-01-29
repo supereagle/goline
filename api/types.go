@@ -26,14 +26,15 @@ var (
 )
 
 type Pipeline struct {
-	Name          string         `json:"name,omitemtpy"`
-	NodeLabel     string         `json:"node_label,omitempty"`
-	Jdk           string         `json:"jdk,omitempty"`
-	Repo          *Repo          `json:"repo,omitempty"`
-	PeriodTrigger *PeriodTrigger `json:"period_trigger,omitempty"`
-	ProjectType   ProjectType    `json:"type,omitemtpy"`
-	Project       interface{}    `json:"project,omitempty"`
-	Stages        []Stage        `json:"stages,omitemtpy"`
+	Name             string         `json:"name,omitemtpy"`
+	NodeLabel        string         `json:"node_label,omitempty"`
+	Jdk              string         `json:"jdk,omitempty"`
+	Repo             *Repo          `json:"repo,omitempty"`
+	PeriodTrigger    *PeriodTrigger `json:"period_trigger,omitempty"`
+	ProjectType      ProjectType    `json:"type,omitemtpy"`
+	Project          interface{}    `json:"project,omitempty"`
+	Stages           []Stage        `json:"stages,omitemtpy"`
+	ArchiveWorkspace bool           `json:"archiveWorkspace"`
 }
 
 type Repo struct {

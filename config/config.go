@@ -1,10 +1,9 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
-	"os"
-
-	"github.com/supereagle/goline/utils/json"
+	"io/ioutil"
 )
 
 const (
@@ -20,20 +19,15 @@ type Config struct {
 }
 
 func Read(path string) (*Config, error) {
-	if len(path) == 0 {
-		return nil, fmt.Errorf("The config file path should not be emtpy")
-	}
-
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, fmt.Errorf("Fail to open the config file %s", path)
-	}
-	defer file.Close()
-
-	cfg := &Config{}
-	err = json.Unmarshal2JsonObj(file, cfg)
+	contents, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("Fail to read the config file %s", path)
+	}
+
+	cfg := &Config{}
+	err = json.Unmarshal(contents, cfg)
+	if err != nil {
+		return nil, fmt.Errorf("Fail to unmarshal a JSON object from the config file %s", path)
 	}
 
 	// Set the default config for configures not specified

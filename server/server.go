@@ -41,7 +41,7 @@ func Run(cfg *config.Config) error {
 	// register the swagger handler
 	server.registerSwaggerHandler()
 
-	log.Infoln("Start the server to listen on: %d", cfg.Port)
+	log.Infof("Start the server to listen on: %d", cfg.Port)
 	return http.ListenAndServe(":"+strconv.Itoa(cfg.Port), server.router)
 }
 

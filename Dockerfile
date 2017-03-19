@@ -1,7 +1,5 @@
 FROM golang:1.6.2
 
-MAINTAINER Robin Yue <jmyue@hotmail.com>
-
 ENV PROJECT_DIR /go/src/github.com/supereagle/goline
 EXPOSE 8080
 
